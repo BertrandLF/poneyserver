@@ -3,6 +3,7 @@ package com.ninja_squad.poneyserver.web.security;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ninja_squad.poneyserver.web.Database;
+import com.ninja_squad.poneyserver.web.user.AuthenticatedUser;
 import com.ninja_squad.poneyserver.web.user.Token;
 import com.ninja_squad.poneyserver.web.user.User;
 import io.swagger.annotations.Api;
@@ -37,12 +38,12 @@ public class AuthenticationController {
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Authenticates a user and gets back the 'secret' token in the response. This token must be passed in a header named 'Custom-Authentication' in all subsequent requests")
     @ApiResponses(@ApiResponse(code = 401, message = "The credentials are incorrect"))
-    public Token authenticate(@ApiParam(value = "The authentication credentials", required = true) @RequestBody Credentials credentials,
+    public AuthenticatedUser authenticate(@ApiParam(value = "The authentication credentials", required = true) @RequestBody Credentials credentials,
                               HttpServletResponse response) {
         for (User user : database.getUsers()) {
             if (user.getLogin().equals(credentials.getLogin())
                 && user.getPassword().equals(credentials.getPassword())) {
-                return new Token(user.getLogin());
+                return new AuthenticatedUser(user, new Token(user.getLogin()));
             }
         }
         throw new UnauthorizedException();

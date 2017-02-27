@@ -11,7 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Interceptor which checks the presence and validity of a custome header (named Custom-Authentication),
+ * Interceptor which checks the presence and validity of a custom header (named Custom-Authentication),
  * and initializes the current user. The header must contain a valid user login. If the header is not there or is
  * invalid, a 401 response is sent.
  * @author JB Nizet
@@ -29,15 +29,19 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws Exception {
         String token = request.getHeader("Custom-Authentication");
-        if (token == null) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "You must be authenticated to access this resource");
-            return false;
+        // Allow pre-flight requests (for CORS)
+        if (request.getMethod().equals("OPTIONS")) {
+            return true;
+        } else {
+            if (token == null) {
+                response.sendError(HttpStatus.UNAUTHORIZED.value(), "You must be authenticated to access this resource");
+                return false;
+            }
+            if (!tokenValid(token)) {
+                response.sendError(HttpStatus.UNAUTHORIZED.value(), "Invalid credentials");
+                return false;
+            }
         }
-        if (!tokenValid(token)) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "Invalid credentials");
-            return false;
-        }
-
         return true;
     }
 

@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.ninja_squad.poneyserver.web.pony.Pony;
 import com.ninja_squad.poneyserver.web.race.Bet;
 import com.ninja_squad.poneyserver.web.race.Race;
 import com.ninja_squad.poneyserver.web.race.RaceStatus;
@@ -27,7 +28,14 @@ public class Database {
 
     private Map<BetKey, String> bets = new ConcurrentHashMap<>();
 
-    private static final List<String> PONEYS = Arrays.asList("Orange", "Purple", "Yellow", "Pink", "Blue", "White");
+    private static final List<Pony> PONEYS = Arrays.asList(
+            new Pony(1,"Orange Clockwork","Orange"),
+            new Pony(2,"Purple Haze","Purple"),
+            new Pony(3,"Yellow Submarine","Yellow"),
+            new Pony(4,"Green Day","Green"),
+            new Pony(5,"Blue Hotel","Blue"),
+            new Pony(6,"Pink Floyd","Purple")
+    );
 
     private static class BetKey {
         private String login;
@@ -70,7 +78,7 @@ public class Database {
     public Database() {
         for (int i = 1; i <= 25; i++) {
             RaceStatus status =  i > 20 ? RaceStatus.FINISHED : RaceStatus.READY;
-            races.add(new Race((long) i, "Course " + i, status, randomPoneys()));
+            races.add(new Race((long) i, "Course " + i, status, randomPonies()));
         }
         User cedric = new User();
         cedric.setFirstName("Cédric");
@@ -82,10 +90,10 @@ public class Database {
         users.add(cedric);
     }
 
-    private static Set<String> randomPoneys() {
-        List<String> list = new ArrayList<>(PONEYS);
+    private static Set<Pony> randomPonies() {
+        List<Pony> list = new ArrayList<>(PONEYS);
         Collections.shuffle(list);
-        Set<String> result = new HashSet<>();
+        Set<Pony> result = new HashSet<>();
         for (int i = 0; i < 5; i++) {
             result.add(list.get(i));
         }
@@ -123,7 +131,7 @@ public class Database {
         bets.remove(key);
     }
 
-    public synchronized String getBettedPoney(String login, Long raceId) {
+    public synchronized String getBetPony(String login, Long raceId) {
         return bets.get(new BetKey(login, raceId));
     }
 }

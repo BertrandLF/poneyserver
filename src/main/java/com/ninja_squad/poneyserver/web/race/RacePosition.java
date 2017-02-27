@@ -1,15 +1,17 @@
 package com.ninja_squad.poneyserver.web.race;
 
+import com.ninja_squad.poneyserver.web.pony.Pony;
+
 /**
  * The position of a poney while a race is running
  * @author JB Nizet
  */
 public class RacePosition {
-    private String poney;
+    private Pony pony;
     private int position;
 
-    public RacePosition(String poney) {
-        this.poney = poney;
+    public RacePosition(Pony pony) {
+        this.pony = pony;
     }
 
     public void move(int offset) {
@@ -19,8 +21,8 @@ public class RacePosition {
         }
     }
 
-    public String getPoney() {
-        return poney;
+    public Pony getPony() {
+        return pony;
     }
 
     public int getPosition() {

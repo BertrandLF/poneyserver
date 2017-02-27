@@ -45,7 +45,7 @@ public class BetController {
         if (race.getStatus() != RaceStatus.READY) {
             throw new BadRequestException("The race doesn't accept bets anymore");
         }
-        if (!race.getPoneys().contains(bet.getPoney())) {
+        if (!race.getPonies().contains(bet.getPoney())) {
             throw new BadRequestException("The poney is not part of the race");
         }
 

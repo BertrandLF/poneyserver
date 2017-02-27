@@ -52,7 +52,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public Docket petApi() {
+    public Docket ponyApi() {
         return new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(new ApiInfo("PoneyServer", "The backend for your awesome PoneyRacer application", "2.0", null, "contact@ninja-squad.com", null, null))
             .select()

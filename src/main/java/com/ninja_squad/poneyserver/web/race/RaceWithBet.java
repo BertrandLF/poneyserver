@@ -1,5 +1,7 @@
 package com.ninja_squad.poneyserver.web.race;
 
+import com.ninja_squad.poneyserver.web.pony.Pony;
+
 import java.util.Set;
 
 /**
@@ -14,15 +16,15 @@ public class RaceWithBet {
     private Long id;
     private String name;
     private RaceStatus status;
-    private Set<String> poneys;
-    private String bettedPoney;
+    private Set<Pony> ponies;
+    private String betPony;
 
-    public RaceWithBet(Race race, String bettedPoney) {
+    public RaceWithBet(Race race, String betPony) {
         this.id = race.getId();
         this.name = race.getName();
         this.status = race.getStatus();
-        this.poneys = race.getPoneys();
-        this.bettedPoney = bettedPoney;
+        this.ponies = race.getPonies();
+        this.betPony = betPony;
     }
 
     public Long getId() {
@@ -37,11 +39,11 @@ public class RaceWithBet {
         return status;
     }
 
-    public Set<String> getPoneys() {
-        return poneys;
+    public Set<Pony> getPoneys() {
+        return ponies;
     }
 
-    public String getBettedPoney() {
-        return bettedPoney;
+    public String getBetPony() {
+        return betPony;
     }
 }

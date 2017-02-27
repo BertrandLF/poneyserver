@@ -1,6 +1,7 @@
 package com.ninja_squad.poneyserver.web.race;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ninja_squad.poneyserver.web.pony.Pony;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,8 @@ public class RacePositions {
     private List<RacePosition> positions = new ArrayList<>();
 
     public RacePositions(Race race) {
-        for (String poney : race.getPoneys()) {
-            positions.add(new RacePosition(poney));
+        for (Pony pony : race.getPonies()) {
+            positions.add(new RacePosition(pony));
         }
     }
 

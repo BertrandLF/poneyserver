@@ -3,6 +3,7 @@ package com.ninja_squad.ponyserver.web.race;
 import com.ninja_squad.ponyserver.web.pony.Pony;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,12 +16,14 @@ public class Race {
     private String name;
     private RaceStatus status;
     private Set<Pony> ponies;
+    private Date startInstant;
 
-    public Race(Long id, String name, RaceStatus status, Set<Pony> ponies) {
+    public Race(Long id, String name, RaceStatus status, Set<Pony> ponies, Date startInstant) {
         this.id = id;
         this.name = name;
         this.status = status;
         this.ponies = Collections.unmodifiableSet(new HashSet<>(ponies));
+        this.startInstant = startInstant;
     }
 
     public Long getId() {
@@ -41,5 +44,9 @@ public class Race {
 
     public Set<Pony> getPonies() {
         return ponies;
+    }
+
+    public Date getStartInstant() {
+        return startInstant;
     }
 }

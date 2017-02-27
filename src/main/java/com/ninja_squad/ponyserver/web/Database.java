@@ -1,12 +1,6 @@
 package com.ninja_squad.ponyserver.web;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -75,19 +69,25 @@ public class Database {
         }
     }
 
+    private Date twoMinutesFromNow() {
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.MINUTE, 2);
+        return now.getTime();
+    }
+
     public Database() {
         for (int i = 1; i <= 25; i++) {
             RaceStatus status =  i > 20 ? RaceStatus.FINISHED : RaceStatus.READY;
-            races.add(new Race((long) i, "Course " + i, status, randomPonies()));
+            races.add(new Race((long) i, "Course " + i, status, randomPonies(), twoMinutesFromNow()));
         }
-        User cedric = new User();
-        cedric.setFirstName("Cédric");
-        cedric.setLastName("Exbrayat");
-        cedric.setLogin("ced");
-        cedric.setPassword("password");
-        cedric.setEmail("cedric@ninja-squad.com");
-        cedric.setBirthYear(1986);
-        users.add(cedric);
+        User bertrand = new User();
+        bertrand.setFirstName("Bertrand");
+        bertrand.setLastName("Le Foulgoc");
+        bertrand.setLogin("blf");
+        bertrand.setPassword("password");
+        bertrand.setEmail("bob@sponge.com");
+        bertrand.setBirthYear(1980);
+        users.add(bertrand);
     }
 
     private static Set<Pony> randomPonies() {

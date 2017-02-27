@@ -2,7 +2,6 @@ package com.ninja_squad.ponyserver.web.race;
 
 import com.ninja_squad.ponyserver.web.pony.Pony;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
@@ -19,15 +18,15 @@ public class RaceWithBet {
     private String name;
     private RaceStatus status;
     private Set<Pony> ponies;
-    private String betPony;
+    private Long betPonyId;
     private Date startInstant;
 
-    public RaceWithBet(Race race, String betPony) {
+    public RaceWithBet(Race race, Long betPonyId) {
         this.id = race.getId();
         this.name = race.getName();
         this.status = race.getStatus();
         this.ponies = race.getPonies();
-        this.betPony = betPony;
+        this.betPonyId = betPonyId;
         this.startInstant = race.getStartInstant();
     }
 
@@ -47,8 +46,8 @@ public class RaceWithBet {
         return ponies;
     }
 
-    public String getBetPonies() {
-        return betPony;
+    public Long getBetPonyId() {
+        return betPonyId;
     }
 
     public Date getStartInstant() {

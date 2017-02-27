@@ -44,7 +44,7 @@ public class RaceController {
     @RequestMapping(value = "/{raceId}", method = RequestMethod.GET)
     private RaceWithBet show(@PathVariable("raceId") Long raceId) {
         Race race = database.getRace(raceId);
-        String betPony = database.getBetPony(currentUser.getLogin(), raceId);
+        Long betPony = database.getBetPony(currentUser.getLogin(), raceId);
         return new RaceWithBet(race, betPony);
     }
 }

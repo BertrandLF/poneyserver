@@ -20,7 +20,7 @@ public class Database {
     private List<User> users = new CopyOnWriteArrayList<>();
     private List<Race> races = new CopyOnWriteArrayList<>();
 
-    private Map<BetKey, String> bets = new ConcurrentHashMap<>();
+    private Map<BetKey, Long> bets = new ConcurrentHashMap<>();
 
     private static final List<Pony> PONEYS = Arrays.asList(
             new Pony(1,"Orange Clockwork","Orange"),
@@ -121,9 +121,18 @@ public class Database {
         return null;
     }
 
+    public synchronized Pony getPony(long ponyId) {
+        for (Pony pony : PONEYS) {
+            if (pony.getId() == ponyId) {
+                return pony;
+            }
+        }
+        return null;
+    }
+
     public synchronized void addBet(String login, Bet bet) {
         BetKey key = new BetKey(login, bet.getRaceId());
-        bets.put(key, bet.getPony());
+        bets.put(key, bet.getPonyId());
     }
 
     public synchronized void deleteBet(String login, Long raceId) {
@@ -131,7 +140,7 @@ public class Database {
         bets.remove(key);
     }
 
-    public synchronized String getBetPony(String login, Long raceId) {
+    public synchronized Long getBetPony(String login, Long raceId) {
         return bets.get(new BetKey(login, raceId));
     }
 }

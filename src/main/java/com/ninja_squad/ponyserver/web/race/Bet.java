@@ -5,22 +5,23 @@ package com.ninja_squad.ponyserver.web.race;
  * @author JB Nizet
  */
 public class Bet {
-    private Long raceId;
-    private String pony;
+    private long ponyId;
 
-    public Long getRaceId() {
+    private long raceId;
+
+    public long getPonyId() {
+        return ponyId;
+    }
+
+    public void setPonyId(long pony) {
+        this.ponyId = pony;
+    }
+
+    public long getRaceId() {
         return raceId;
     }
 
-    public void setRaceId(Long raceId) {
+    public void setRaceId(long raceId) {
         this.raceId = raceId;
-    }
-
-    public String getPony() {
-        return pony;
-    }
-
-    public void setPony(String pony) {
-        this.pony = pony;
     }
 }

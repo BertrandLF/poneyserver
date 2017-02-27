@@ -2,6 +2,7 @@ package com.ninja_squad.ponyserver.web.race;
 
 import com.ninja_squad.ponyserver.web.BadRequestException;
 import com.ninja_squad.ponyserver.web.Database;
+import com.ninja_squad.ponyserver.web.pony.Pony;
 import com.ninja_squad.ponyserver.web.security.CurrentUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
  * Controller allowing the user to place or remove bets on ponies in races. Only one pony of a race can have a bet
  * from a given user. Placing a bet on another pony removes the previous bet, if any.
@@ -24,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api("Place and cancel bets")
 @RestController
-@RequestMapping(value = "/api/bets", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/races/{raceId}/bets", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BetController {
 
     @Autowired
@@ -40,16 +44,17 @@ public class BetController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Places a bet on a pony in a race")
     @ApiResponses(@ApiResponse(code = 400, message = "The race doesn't accept bets, or the pony is not part of the race"))
-    public void placeBet(@RequestBody Bet bet) {
-        Race race = database.getRace(bet.getRaceId());
+    public RaceWithBet placeBet(HttpServletResponse response, @RequestBody Bet bet, @PathVariable("raceId") Long raceId) throws IOException {
+        Race race = database.getRace(raceId);
+        Pony betPony = database.getPony(bet.getPonyId());
         if (race.getStatus() != RaceStatus.READY) {
             throw new BadRequestException("The race doesn't accept bets anymore");
         }
-        if (!race.getPonies().contains(bet.getPony())) {
+        if (!race.getPonies().contains(betPony)) {
             throw new BadRequestException("The pony is not part of the race");
         }
-
         database.addBet(currentUser.getLogin(), bet);
+        return new RaceWithBet(race, betPony.getId());
     }
 
     /**

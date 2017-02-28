@@ -7,6 +7,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -46,14 +48,14 @@ public class RaceRunner {
             this.positions = new RacePositions(race);
         }
 
-        @Override
+        @MessageMapping("/race")
         public Void call() throws Exception {
             while (positions.getMaxPosition() < 100) {
                 Thread.sleep(1000L);
                 for (RacePosition racePosition : positions.getPositions()) {
                     racePosition.move(random.nextInt(5) + 1);
                 }
-                messagingTemplate.convertAndSend("/topic/" + race.getId(), positions);
+                messagingTemplate.convertAndSend("/race/" + race.getId(), positions);
             }
             race.setStatus(RaceStatus.FINISHED);
             return null;

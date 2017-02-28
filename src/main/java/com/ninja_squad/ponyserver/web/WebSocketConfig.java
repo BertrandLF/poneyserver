@@ -23,12 +23,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     /**
      * Configures the websocket message broker with the path "/topic". The positions of every pony during a running
-     * race are broadcasted to /topic/[id of the race]. Clients interested in the positions of the ponies of the race
-     * 12 must thus subscribe using <code>stompClient.subscribe('/topic/12', callback)</code>.
+     * race are broadcasted to /race/[id of the race]. Clients interested in the positions of the ponies of the race
+     * 12 must thus subscribe using <code>stompClient.subscribe('/race/12', callback)</code>.
      */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic");
+        registry.enableSimpleBroker("/race");
     }
 
     /**
@@ -37,7 +37,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/api/race").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();
     }
 
     @Override

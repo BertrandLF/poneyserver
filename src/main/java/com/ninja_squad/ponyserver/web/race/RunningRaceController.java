@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * The controller allowing to start a race. Once a race is started, the positions of the ponies are broadcasted every
- * second to all the websocket clients having subscribed to /topic/[id of the race].
+ * second to all the websocket clients having subscribed to /race/[id of the race].
  * @author JB Nizet
  */
 @Api("Start a race")

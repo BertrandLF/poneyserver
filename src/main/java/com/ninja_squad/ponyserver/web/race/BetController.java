@@ -60,7 +60,7 @@ public class BetController {
     /**
      * Deletes a bet on a race.
      */
-    @RequestMapping(value = "/{raceId}", method = RequestMethod.DELETE)
+    @RequestMapping(method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation("Cancels the current bet the given race")
     @ApiResponses(@ApiResponse(code = 400, message = "The race doesn't accept bets"))

@@ -6,6 +6,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.ninja_squad.ponyserver.web.pony.Pony;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -13,7 +14,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 /**
- * Service used to start a race. Starting a race starts a thread which updates the positions of the ponies in a random
+ * Service used to start a race. Starting a race starts a thread which updates ponies' postions in a random
  * way, from 0 to 100, every second. At each second, the position can increase of 1, 2 or 3.
  * @author JB Nizet
  */
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class RaceRunner {
 
     /**
-     * The messaging template allowing to broadcast the running races positions.
+     * The messaging template allowing to broadcast the running races.
      */
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -41,21 +42,20 @@ public class RaceRunner {
     private class RaceCallable implements Callable<Void> {
         private Random random = new Random();
         private Race race;
-        private RacePositions positions;
 
         private RaceCallable(Race race) {
             this.race = race;
-            this.positions = new RacePositions(race);
         }
 
         @MessageMapping("/race")
         public Void call() throws Exception {
-            while (positions.getMaxPosition() < 100) {
+
+            while (race.getMaxPosition() < 100) {
                 Thread.sleep(1000L);
-                for (RacePosition racePosition : positions.getPositions()) {
-                    racePosition.move(random.nextInt(5) + 1);
+                for (Pony pony : race.getPonies()) {
+                    pony.move(random.nextInt(5) + 1);
                 }
-                messagingTemplate.convertAndSend("/race/" + race.getId(), positions);
+                messagingTemplate.convertAndSend("/race/" + race.getId(), race);
             }
             race.setStatus(RaceStatus.FINISHED);
             return null;

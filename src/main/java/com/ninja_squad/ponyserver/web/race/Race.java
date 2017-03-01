@@ -2,10 +2,7 @@ package com.ninja_squad.ponyserver.web.race;
 
 import com.ninja_squad.ponyserver.web.pony.Pony;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A race, which can be not started, started or finished, and which has 3 ponies.
@@ -22,7 +19,7 @@ public class Race {
         this.id = id;
         this.name = name;
         this.status = status;
-        this.ponies = Collections.unmodifiableSet(new HashSet<>(ponies));
+        this.ponies = new HashSet<>(ponies);
         this.startInstant = startInstant;
     }
 
@@ -48,5 +45,10 @@ public class Race {
 
     public Date getStartInstant() {
         return startInstant;
+    }
+
+    public int getMaxPosition() {
+        Optional<Pony> leadingPony = ponies.stream().max(Comparator.comparing(Pony::getPosition));
+        return leadingPony.isPresent()? leadingPony.get().getPosition() : 0;
     }
 }

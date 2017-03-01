@@ -9,10 +9,13 @@ public class Pony {
     private String name;
     private String color;
 
+    private int position;
+
     public Pony(long id, String name, String color){
         this.id = id;
         this.name = name;
         this.color = color;
+        this.position = 0;
     }
 
     @SuppressWarnings("unused")
@@ -30,4 +33,36 @@ public class Pony {
         return color;
     }
 
+    @SuppressWarnings("unused")
+    public int getPosition() {
+        return position;
+    }
+
+    public void move(int distance){
+        this.setPosition(this.getPosition() + distance);
+    }
+
+    private void setPosition(int position) {
+        this.position = position;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Pony pony = (Pony) o;
+
+        if (id != pony.id) return false;
+        if (!name.equals(pony.name)) return false;
+        return color.equals(pony.color);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + name.hashCode();
+        result = 31 * result + color.hashCode();
+        return result;
+    }
 }

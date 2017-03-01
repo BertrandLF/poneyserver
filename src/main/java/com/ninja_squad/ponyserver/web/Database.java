@@ -69,16 +69,16 @@ public class Database {
         }
     }
 
-    private Date twoMinutesFromNow() {
+    private Date twoMinutesFromNow(int times) {
         Calendar now = Calendar.getInstance();
-        now.add(Calendar.MINUTE, 2);
+        now.add(Calendar.MINUTE, 2 * times);
         return now.getTime();
     }
 
     public Database() {
         for (int i = 1; i <= 25; i++) {
             RaceStatus status =  i > 20 ? RaceStatus.FINISHED : RaceStatus.READY;
-            races.add(new Race((long) i, "Course " + i, status, randomPonies(), twoMinutesFromNow()));
+            races.add(new Race((long) i, "Course " + i, status, randomPonies(), twoMinutesFromNow(i)));
         }
         User bertrand = new User();
         bertrand.setFirstName("Bertrand");

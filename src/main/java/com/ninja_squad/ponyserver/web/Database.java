@@ -5,7 +5,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.ninja_squad.ponyserver.web.pony.Pony;
+import com.ninja_squad.ponyserver.web.pony.PonyNames;
 import com.ninja_squad.ponyserver.web.race.Bet;
+import com.ninja_squad.ponyserver.web.pony.PonyColor;
 import com.ninja_squad.ponyserver.web.race.Race;
 import com.ninja_squad.ponyserver.web.race.RaceStatus;
 import com.ninja_squad.ponyserver.web.user.User;
@@ -19,17 +21,9 @@ import org.springframework.stereotype.Service;
 public class Database {
     private List<User> users = new CopyOnWriteArrayList<>();
     private List<Race> races = new CopyOnWriteArrayList<>();
+    private static List<Pony> ponies = new CopyOnWriteArrayList<>();
 
     private Map<BetKey, Long> bets = new ConcurrentHashMap<>();
-
-    private static final List<Pony> PONEYS = Arrays.asList(
-            new Pony(1,"Orange Clockwork","Orange"),
-            new Pony(2,"Purple Haze","Purple"),
-            new Pony(3,"Yellow Submarine","Yellow"),
-            new Pony(4,"Green Day","Green"),
-            new Pony(5,"Blue Hotel","Blue"),
-            new Pony(6,"Pink Floyd","Purple")
-    );
 
     private static class BetKey {
         private String login;
@@ -91,11 +85,13 @@ public class Database {
     }
 
     private static Set<Pony> randomPonies() {
-        List<Pony> list = new ArrayList<>(PONEYS);
-        Collections.shuffle(list);
+        int index = 0;
         Set<Pony> result = new HashSet<>();
         for (int i = 0; i < 5; i++) {
-            result.add(list.get(i));
+            Pony pony = new Pony(index, PonyNames.randomName(), PonyColor.randomPonyColor().name());
+            result.add(pony);
+            ponies.add(pony);
+            index++;
         }
         return result;
     }
@@ -122,7 +118,7 @@ public class Database {
     }
 
     public synchronized Pony getPony(long ponyId) {
-        for (Pony pony : PONEYS) {
+        for (Pony pony : ponies) {
             if (pony.getId() == ponyId) {
                 return pony;
             }

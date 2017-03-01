@@ -51,4 +51,15 @@ public class Race {
         Optional<Pony> leadingPony = ponies.stream().max(Comparator.comparing(Pony::getPosition));
         return leadingPony.isPresent()? leadingPony.get().getPosition() : 0;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder race = new StringBuilder();
+        this.ponies.stream().map(pony -> race
+                .append(pony.getName())
+                .append(" ")
+                .append(pony.getPosition())
+                .append("\n"));
+        return race.toString();
+    }
 }

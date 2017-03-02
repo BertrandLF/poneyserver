@@ -19,10 +19,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class Database {
+    
+    private static List<Pony> ponies = new CopyOnWriteArrayList<>();
+    private static int index = 0;
+
     private List<User> users = new CopyOnWriteArrayList<>();
     private List<Race> races = new CopyOnWriteArrayList<>();
-    private static List<Pony> ponies = new CopyOnWriteArrayList<>();
-
     private Map<BetKey, Long> bets = new ConcurrentHashMap<>();
 
     private static class BetKey {
@@ -85,7 +87,7 @@ public class Database {
     }
 
     private static Set<Pony> randomPonies() {
-        int index = 0;
+
         Set<Pony> result = new HashSet<>();
         for (int i = 0; i < 5; i++) {
             Pony pony = new Pony(index, PonyNames.randomName(), PonyColor.randomPonyColor().name());

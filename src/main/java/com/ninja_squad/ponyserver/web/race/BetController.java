@@ -44,17 +44,17 @@ public class BetController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Places a bet on a pony in a race")
     @ApiResponses(@ApiResponse(code = 400, message = "The race doesn't accept bets, or the pony is not part of the race"))
-    public RaceWithBet placeBet(HttpServletResponse response, @RequestBody Bet bet, @PathVariable("raceId") Long raceId) throws IOException {
-        bet.setRaceId(raceId);
+    public RaceWithBet placeBet(HttpServletResponse response, @RequestBody PonyInRace ponyInRace, @PathVariable("raceId") Long raceId) throws IOException {
+        ponyInRace.setRaceId(raceId);
         Race race = database.getRace(raceId);
-        Pony betPony = database.getPony(bet.getPonyId());
+        Pony betPony = database.getPony(ponyInRace.getPonyId());
         if (race.getStatus() != RaceStatus.READY) {
             throw new BadRequestException("The race doesn't accept bets anymore");
         }
         if (!race.getPonies().contains(betPony)) {
             throw new BadRequestException("The pony is not part of the race");
         }
-        database.addBet(currentUser.getLogin(), bet);
+        database.addBet(currentUser.getLogin(), ponyInRace);
         return new RaceWithBet(race, betPony.getId());
     }
 

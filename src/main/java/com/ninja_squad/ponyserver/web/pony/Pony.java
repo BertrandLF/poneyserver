@@ -10,6 +10,9 @@ public class Pony {
     private String color;
 
     private int position;
+    private int sprinted;
+    private boolean boosted;
+    private int maxBoostSteps = 1;
 
     public Pony(long id, String name, String color){
         this.id = id;
@@ -64,5 +67,22 @@ public class Pony {
         result = 31 * result + name.hashCode();
         result = 31 * result + color.hashCode();
         return result;
+    }
+
+    public void setBoosted(boolean boost) {
+        this.boosted = boost;
+    }
+
+    public boolean isBoosted() {
+        return boosted;
+    }
+
+    public void wasBoosted() {
+        if (this.sprinted == maxBoostSteps) {
+            this.sprinted = 0;
+            this.setBoosted(false);
+        } else {
+            this.sprinted++;
+        }
     }
 }

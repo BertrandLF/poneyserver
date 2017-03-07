@@ -4,7 +4,7 @@ package com.ninja_squad.ponyserver.web.race;
  * A bet on a pony for a given race.
  * @author JB Nizet
  */
-public class Bet {
+public class PonyInRace {
     private long ponyId;
 
     private long raceId;

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 /**
  * Service used to start a race. Starting a race starts a thread which updates ponies' postions in a random
  * way, from 0 to 100, every second. At each second, the position can increase of 1, 2 or 3.
+ *
  * @author JB Nizet
  */
 @Service
@@ -51,18 +52,29 @@ public class RaceRunner {
         public Void call() throws Exception {
 
             while (race.getStatus() != RaceStatus.FINISHED) {
-                for (Pony pony : race.getPonies()) {
-                    pony.move(random.nextInt(5) + 1);
-                }
-                // for positions above 100 to be picked up by client
-                sendRace();
-                Thread.sleep(1000L);
+                movePonies();
+                raceTick();
                 if (race.getMaxPosition() >= 100) {
                     race.setStatus(RaceStatus.FINISHED);
                     sendRace();
                 }
             }
             return null;
+        }
+
+        private void movePonies() {
+            for (Pony pony : race.getPonies()) {
+                pony.move(random.nextInt(5) + 1);
+                if (pony.isBoosted()) {
+                    pony.move(3);
+                    pony.wasBoosted();
+                }
+            }
+        }
+
+        private void raceTick() throws InterruptedException {
+            sendRace();
+            Thread.sleep(1000L);
         }
 
         private void sendRace() {

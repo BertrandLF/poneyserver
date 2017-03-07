@@ -6,7 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.ninja_squad.ponyserver.web.pony.Pony;
 import com.ninja_squad.ponyserver.web.pony.PonyNames;
-import com.ninja_squad.ponyserver.web.race.Bet;
+import com.ninja_squad.ponyserver.web.race.PonyInRace;
 import com.ninja_squad.ponyserver.web.pony.PonyColor;
 import com.ninja_squad.ponyserver.web.race.Race;
 import com.ninja_squad.ponyserver.web.race.RaceStatus;
@@ -128,9 +128,9 @@ public class Database {
         return null;
     }
 
-    public synchronized void addBet(String login, Bet bet) {
-        BetKey key = new BetKey(login, bet.getRaceId());
-        bets.put(key, bet.getPonyId());
+    public synchronized void addBet(String login, PonyInRace ponyInRace) {
+        BetKey key = new BetKey(login, ponyInRace.getRaceId());
+        bets.put(key, ponyInRace.getPonyId());
     }
 
     public synchronized void deleteBet(String login, Long raceId) {
@@ -140,5 +140,10 @@ public class Database {
 
     public synchronized Long getBetPony(String login, Long raceId) {
         return bets.get(new BetKey(login, raceId));
+    }
+
+    public synchronized void boostPony(long ponyId) {
+        Pony pony = getPony(ponyId);
+        pony.setBoosted(true);
     }
 }

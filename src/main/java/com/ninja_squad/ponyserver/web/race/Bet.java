@@ -13,15 +13,11 @@ public class Bet {
         return ponyId;
     }
 
-    public void setPonyId(long pony) {
-        this.ponyId = pony;
-    }
-
     public long getRaceId() {
         return raceId;
     }
 
-    public void setRaceId(long raceId) {
+    public void setRaceId(Long raceId) {
         this.raceId = raceId;
     }
 }

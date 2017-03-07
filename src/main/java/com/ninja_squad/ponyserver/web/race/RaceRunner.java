@@ -50,15 +50,23 @@ public class RaceRunner {
         @MessageMapping("/race")
         public Void call() throws Exception {
 
-            while (race.getMaxPosition() < 100) {
-                Thread.sleep(1000L);
+            while (race.getStatus() != RaceStatus.FINISHED) {
                 for (Pony pony : race.getPonies()) {
                     pony.move(random.nextInt(5) + 1);
                 }
-                messagingTemplate.convertAndSend("/race/" + race.getId(), race);
+                // for positions above 100 to be picked up by client
+                sendRace();
+                Thread.sleep(1000L);
+                if (race.getMaxPosition() >= 100) {
+                    race.setStatus(RaceStatus.FINISHED);
+                    sendRace();
+                }
             }
-            race.setStatus(RaceStatus.FINISHED);
             return null;
+        }
+
+        private void sendRace() {
+            messagingTemplate.convertAndSend("/race/" + race.getId(), race);
         }
     }
 }

@@ -45,6 +45,7 @@ public class BetController {
     @ApiOperation("Places a bet on a pony in a race")
     @ApiResponses(@ApiResponse(code = 400, message = "The race doesn't accept bets, or the pony is not part of the race"))
     public RaceWithBet placeBet(HttpServletResponse response, @RequestBody Bet bet, @PathVariable("raceId") Long raceId) throws IOException {
+        bet.setRaceId(raceId);
         Race race = database.getRace(raceId);
         Pony betPony = database.getPony(bet.getPonyId());
         if (race.getStatus() != RaceStatus.READY) {
